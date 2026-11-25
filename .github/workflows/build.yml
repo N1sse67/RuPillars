@@ -20,7 +20,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: current
-      - run: gradle build
+      - name: Build
+        run: |
+          gradle build --console=plain > build.log 2>&1 || { echo "=== ОШИБКИ СБОРКИ ==="; grep -B1 -A4 "error:" build.log | head -120; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: RuPillars
